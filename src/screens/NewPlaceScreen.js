@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import ImageSelector from "../components/ImageSelector";
-import { addPlace } from "../store/place.slices";
+import { savePlace } from "../store/place.slices";
 import colors from "../utils/colors";
 
 const styles = StyleSheet.create({
@@ -35,11 +35,12 @@ const styles = StyleSheet.create({
 const NewPlaceSreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
+  const [image, setImage] = useState();
 
   const handleTitleChange = (text) => setTitle(text);
 
   const handleSave = () => {
-    dispatch(addPlace(title));
+    dispatch(savePlace(title, image));
     navigation.navigate("Place");
   };
 
@@ -54,7 +55,7 @@ const NewPlaceSreen = ({ navigation }) => {
         />
         <ImageSelector
           onImage={(image) => {
-            console.log(image);
+            setImage(image);
           }}
         />
         <Button
