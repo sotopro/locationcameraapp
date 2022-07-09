@@ -37,13 +37,18 @@ const NewPlaceSreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [image, setImage] = useState();
+  const [location, setLocation] = useState();
 
   const handleTitleChange = (text) => setTitle(text);
 
   const handleSave = () => {
-    dispatch(savePlace(title, image));
+    dispatch(savePlace(title, image, '123 Street, City, Country', location));
     navigation.navigate("Place");
   };
+
+  const onLocationPicked = (location) => {
+    setLocation(location);
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -59,7 +64,7 @@ const NewPlaceSreen = ({ navigation }) => {
             setImage(image);
           }}
         />
-        <LocationSelector />
+        <LocationSelector onLocation={onLocationPicked}/>
         <Button
           title="Grabar Dirección"
           color={colors.primary}
