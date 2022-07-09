@@ -42,7 +42,7 @@ const NewPlaceSreen = ({ navigation }) => {
   const handleTitleChange = (text) => setTitle(text);
 
   const handleSave = () => {
-    dispatch(savePlace(title, image, '123 Street, City, Country', location));
+    dispatch(savePlace(title, image, location));
     navigation.navigate("Place");
   };
 

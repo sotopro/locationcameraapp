@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Button, Text, StyleSheet, Alert } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import * as Location from "expo-location";
 import MapPreview from "./MapPreview";
 
@@ -21,11 +22,17 @@ const styles = StyleSheet.create({
     image: {
         width: "100%",
         height: "100%",
+    },
+    buttons: {
+        flexDirection: "row",
+        justifyContent: "space-around",
     }
 })
 
 const LocationSelector = ({ onLocation }) => {
-    const [pickedLocation, setPickedLocation] = React.useState();
+    const navigation = useNavigation();
+    const route = useRoute();
+    const [pickedLocation, setPickedLocation] = useState();
 
     const handleGetLocation = async () => {
         const isLocationGranted = await verifyPermissions();
@@ -61,13 +68,37 @@ const LocationSelector = ({ onLocation }) => {
 
         return true;
     }
+    
+    const handlePickLocation = async () => {
+        const isLocationGranted = await verifyPermissions();
+        if(!isLocationGranted) return;
+        navigation.navigate('Map')
+    }
+
+    const mapLocation = route?.params?.mapLocation;
+
+    useEffect(() => {
+        if(mapLocation) {
+            setPickedLocation({
+                lat: mapLocation.latitude,
+                lng: mapLocation.longitude,
+            });
+            onLocation({
+                lat: mapLocation.latitude,
+                lng: mapLocation.longitude,
+            });
+        }
+    }, [mapLocation])
 
     return (
         <View style={styles.container}>
             <MapPreview location={pickedLocation} style={styles.preview}>
                 <Text>Esperando ubicacion...</Text>
             </MapPreview>
+            <View style={styles.buttons}>
             <Button title="Obtener ubicacion" onPress={handleGetLocation} color={colors.primary} />
+            <Button title="Elegir del mapa" onPress={handlePickLocation} color={colors.primary} />
+            </View>
         </View>
     )
 }
