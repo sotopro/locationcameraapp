@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import Place from "../models/Place";
 
 const initialState = {
-  places: [{}],
+  places: [],
 };
 
 const placeSlice = createSlice({
